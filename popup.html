@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 320px;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    
+    .header p {
+      margin: 5px 0 0 0;
+      opacity: 0.8;
+      font-size: 14px;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .btn.active {
+      background: rgba(76, 175, 80, 0.8);
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .btn.danger {
+      background: rgba(244, 67, 54, 0.6);
+      border-color: rgba(244, 67, 54, 0.8);
+    }
+    
+    .btn.danger:hover:not(:disabled) {
+      background: rgba(244, 67, 54, 0.8);
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .status.success {
+      background: rgba(76, 175, 80, 0.3);
+      border-color: rgba(76, 175, 80, 0.5);
+    }
+    
+    .status.error {
+      background: rgba(244, 67, 54, 0.3);
+      border-color: rgba(244, 67, 54, 0.5);
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    
+    .stat-number {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      color: #4CAF50;
+    }
+    
+    .version {
+      text-align: center;
+      margin-top: 15px;
+      opacity: 0.6;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>SVG Copier</h1>
+    <p>Copy SVG icons with ease</p>
+  </div>
+  
+  <div class="button-group">
+    <button id="toggleBtn" class="btn">
+      🎯 Start SVG Detection
+    </button>
+    
+    <button id="copyAllBtn" class="btn" disabled>
+      📋 Copy All SVGs
+    </button>
+    
+    <button id="downloadBtn" class="btn" disabled>
+      💾 Download as ZIP
+    </button>
+    
+    <button id="clearBtn" class="btn danger" disabled>
+      🗑️ Clear All
+    </button>
+  </div>
+  
+  <div id="status" class="status" style="display: none;">
+    Click on highlighted SVG elements to copy them!
+  </div>
+  
+  <div class="stats">
+    <div class="stat-item">
+      <span class="stat-number" id="svgCount">0</span>
+      <span>SVGs Found</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number" id="copiedCount">0</span>
+      <span>Copied</span>
+    </div>
+  </div>
+  
+  <div class="version">
+    v1.0 - SVG Copier Extension
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

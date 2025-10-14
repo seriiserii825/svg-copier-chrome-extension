@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Extension Icons</title>
+</head>
+<body>
+    <h1>SVG Copier Extension Icons</h1>
+    <p>Use this page to generate the required icon files for the extension.</p>
+    
+    <div>
+        <h2>Icon Preview</h2>
+        <canvas id="icon" width="128" height="128" style="border: 1px solid #ccc;"></canvas>
+    </div>
+    
+    <div>
+        <h2>Download Icons</h2>
+        <button onclick="downloadIcon(16)">Download 16x16</button>
+        <button onclick="downloadIcon(32)">Download 32x32</button>
+        <button onclick="downloadIcon(48)">Download 48x48</button>
+        <button onclick="downloadIcon(128)">Download 128x128</button>
+    </div>
+
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            const scale = size / 128;
+            
+            ctx.clearRect(0, 0, size, size);
+            ctx.scale(scale, scale);
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 128, 128);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            // Draw background circle
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(64, 64, 56, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw SVG-like shape (simplified)
+            ctx.strokeStyle = 'white';
+            ctx.fillStyle = 'white';
+            ctx.lineWidth = 3;
+            
+            // Draw a simplified SVG icon representation
+            ctx.beginPath();
+            ctx.moveTo(30, 40);
+            ctx.lineTo(50, 25);
+            ctx.lineTo(70, 40);
+            ctx.lineTo(85, 55);
+            ctx.lineTo(70, 70);
+            ctx.lineTo(85, 85);
+            ctx.lineTo(70, 100);
+            ctx.lineTo(50, 85);
+            ctx.lineTo(30, 100);
+            ctx.lineTo(45, 85);
+            ctx.lineTo(30, 70);
+            ctx.lineTo(45, 55);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Add copy symbol (small squares)
+            ctx.fillStyle = '#764ba2';
+            ctx.fillRect(75, 35, 8, 8);
+            ctx.fillRect(80, 30, 8, 8);
+            
+            ctx.resetTransform();
+        }
+        
+        function downloadIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            drawIcon(canvas, size);
+            
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Draw preview
+        const canvas = document.getElementById('icon');
+        drawIcon(canvas, 128);
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Icon Files</title>
+</head>
+<body>
+    <h1>Creating Extension Icons...</h1>
+    <div id="status">Generating icons...</div>
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <script>
+        function createIconDataURL(size) {
+            const canvas = document.getElementById('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            // Draw background circle
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size*0.44, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw SVG-like shape (simplified)
+            const scale = size / 128;
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2 * scale;
+            
+            // Scale coordinates
+            const coords = [
+                [30, 40], [50, 25], [70, 40], [85, 55],
+                [70, 70], [85, 85], [70, 100], [50, 85],
+                [30, 100], [45, 85], [30, 70], [45, 55]
+            ];
+            
+            ctx.beginPath();
+            coords.forEach(([x, y], i) => {
+                const scaledX = x * scale;
+                const scaledY = y * scale;
+                if (i === 0) ctx.moveTo(scaledX, scaledY);
+                else ctx.lineTo(scaledX, scaledY);
+            });
+            ctx.closePath();
+            ctx.fill();
+            
+            // Add copy symbol
+            ctx.fillStyle = '#2196F3';
+            const copySize = 6 * scale;
+            ctx.fillRect(75 * scale, 35 * scale, copySize, copySize);
+            ctx.fillRect(80 * scale, 30 * scale, copySize, copySize);
+            
+            return canvas.toDataURL('image/png');
+        }
+
+        function downloadIcon(size, dataURL) {
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = dataURL;
+            link.click();
+        }
+
+        // Generate and download all icons
+        setTimeout(() => {
+            const sizes = [16, 32, 48, 128];
+            let downloaded = 0;
+            
+            sizes.forEach((size, index) => {
+                setTimeout(() => {
+                    const dataURL = createIconDataURL(size);
+                    downloadIcon(size, dataURL);
+                    downloaded++;
+                    
+                    document.getElementById('status').innerHTML = 
+                        `Generated ${downloaded}/${sizes.length} icons. Please save them to the icons folder.`;
+                    
+                    if (downloaded === sizes.length) {
+                        document.getElementById('status').innerHTML += 
+                            '<br><br><strong>All icons generated! Save them as:<br>' +
+                            'icon16.png, icon32.png, icon48.png, icon128.png<br>' +
+                            'in the icons/ folder, then reload the extension.</strong>';
+                    }
+                }, index * 500);
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
