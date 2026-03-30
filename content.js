@@ -162,8 +162,8 @@ class SVGCopier {
       svgString = this.cleanSVGString(svgString);
       
       // Copy to clipboard
-      await navigator.clipboard.writeText(svgString);
-      
+      await this.writeToClipboard(svgString);
+
       // Mark as copied
       svgElement.classList.add('copied');
       
@@ -184,6 +184,22 @@ class SVGCopier {
     } catch (error) {
       console.error('Failed to copy SVG:', error);
       this.showNotification('Failed to copy SVG', 'error');
+    }
+  }
+
+  async writeToClipboard(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      if (!ok) throw new Error('execCommand copy failed');
     }
   }
 
@@ -235,7 +251,7 @@ class SVGCopier {
       const combinedSVGs = allSVGs.join('\n\n<!-- Next SVG -->\n\n');
       
       try {
-        await navigator.clipboard.writeText(combinedSVGs);
+        await this.writeToClipboard(combinedSVGs);
         this.updateCounter();
         this.updatePopupStats();
         return { count: successCount };
